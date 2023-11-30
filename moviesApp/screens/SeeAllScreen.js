@@ -1,53 +1,39 @@
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, TouchableWithoutFeedback, Dimensions } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'twrnc'
 import { XMarkIcon } from 'react-native-heroicons/outline'
 import { useNavigation } from '@react-navigation/native'
-import { fallbackMoviePoster, image185, searchMovies } from '../api/moviedb'
-import { debounce } from 'lodash'
+import { ArrowLeftIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
+import { fetchPopularMovies, fallbackMoviePoster, image185 } from '../api/moviedb';
+import { styles } from '../theme/theme';
 import Loading from '../components/loading';
 const {width, height} =  Dimensions.get('window');
 
-export default function SearchScreen() {
+export default function SeeAllScreen() {
     const navigation = useNavigation();
     const [results, setResults] = useState([]);
     let movieName= "Ant Man and The Wasp:Quantunamia";
-    const handleSearch = search=>{
-        if(search && search.length>2){
-            setLoading(true);
-            searchMovies({
-                query: search,
-                include_adult: false,
-                language: 'en-US',
-                page: '1'
-            }).then(data=>{
-                console.log('got search results');
-                setLoading(false);
-                if(data && data.results) setResults(data.results);
-            })
-        }else{
-            setLoading(false);
-            setResults([])
-        }
+    const [loading, setLoading] = useState(true);
+    useEffect(()=>{
+        getMoreMovies();
+      },[]);
+      const getMoreMovies = async ()=>{
+        const data = await fetchPopularMovies();
+        console.log('got trending', data)
+        if(data && data.results) setResults(data.results);
+        setLoading(false);
       }
-    const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
-    const [loading, setLoading] = useState(false);
     return (
         <SafeAreaView style={tw`bg-neutral-800 flex-1`}>
-        <View style={tw`mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full`}>
-        <TextInput  
-        onChangeText={handleTextDebounce}
-                placeholder="Search Movie" 
-                placeholderTextColor={'lightgray'} 
-                style={tw`pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider`}
-            />
+        <View style={tw`mx-4 mb-3 flex-row  items-center`}>
             <TouchableOpacity 
                 onPress={()=> navigation.navigate('Home')}
-                style={tw`rounded-full p-3 m-1 bg-neutral-500`} 
             >
-                <XMarkIcon size="25" color="white" />
+            <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
             </TouchableOpacity>
+            <Text style={tw`text-white text-3xl font-bold ml-25`}>
+          <Text style={styles.text}>S</Text>ee All</Text>
         </View>
         {
             loading? (
@@ -59,7 +45,7 @@ export default function SearchScreen() {
                     contentContainerStyle={{paddingHorizontal:15}}
                     style={tw`space-y-3`}
                 >
-                    <Text style={tw`text-white font-semibold ml-1`}>Results ({results.length})</Text>
+                   
                     <View style={tw`flex-row justify-between flex-wrap`}>
                     {
                             results.map((item, index)=>{
@@ -70,8 +56,8 @@ export default function SearchScreen() {
                                         >
                                   <View style={tw`space-y-2 mb-4`}>
                                             <Image 
-                                            source={{uri: image185(item.poster_path) || fallbackMoviePoster}}
                                                  //source={require('../assets/images/moviePoster2.png')}
+                                                 source={{uri: image185(item.poster_path) || fallbackMoviePoster}}
                                                 style={{ ...{ width:  width * 0.44, height: height * 0.3 }, ...tw`rounded-3xl` }}
                                             />
                                             <Text style={tw`text-gray-300 ml-1`}>

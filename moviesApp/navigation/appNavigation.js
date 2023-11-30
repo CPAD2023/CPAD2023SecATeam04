@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SeeAllScreen from '../screens/SeeAllScreen'
 const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   return (
@@ -17,6 +18,11 @@ export default function AppNavigation() {
           name="Search"
           options={{headerShown: false}}
           component={SearchScreen}
+        />
+        <Stack.Screen
+          name="SeeAll"
+          options={{headerShown: false}}
+          component={SeeAllScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -13,7 +13,7 @@ export default function MovieList({title, data}) {
         <View style={tw`mb-8 space-y-4`}>
             <View style={tw`mx-4 flex-row justify-between items-center`}>
             <Text style={tw`text-white text-lg`}>{title}</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate('SeeAll')}>
               <Text style={{ ...styles.text, ...tw`text-lg` }}>See All</Text>
             </TouchableOpacity>
                 </View>
