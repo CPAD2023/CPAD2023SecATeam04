@@ -3,6 +3,7 @@ import React from 'react'
 import tw from 'twrnc'
 import { styles } from '../theme/theme';
 import { useNavigation } from '@react-navigation/native'
+import {image185, fallbackMoviePoster} from '../api/moviedb';
 const {width, height} =  Dimensions.get('window');
 
 export default function MovieList({title, data}) {
@@ -29,13 +30,14 @@ export default function MovieList({title, data}) {
                     >
                         <View style={tw`space-y-1 mr-4`}>
                         <Image 
-                              source={require('../assets/images/moviePoster2.png')}
+                              //source={require('../assets/images/moviePoster2.png')}
+                              source={{uri: image185(item.poster_path)|| fallbackMoviePoster}}
                               style={{ ...{ width: width * 0.33, height: height * 0.22 }, ...tw`rounded-3xl` }}>
                                 
                               </Image>
                         <Text style={tw`text-neutral-300 ml-1`}>
                             {
-                              movieName.length>14?movieName.slice(0,14)+'...': movieName  
+                              item.title.length>14? item.title.slice(0,14)+'...': item.title
                             }
                             </Text>
                         </View>
