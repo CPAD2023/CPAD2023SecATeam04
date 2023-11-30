@@ -66,7 +66,7 @@ export default function HomeScreen() {
           contentContainerStyle={{paddingBottom: 10}}
         >
           {trending.length>0 && <TrendingMovies data={trending}/>}
-          {upcoming.length>0 && <MovieList title="UpcomingMovies" data={upcoming}/>}
+          {upcoming.length>0 && <MovieList title="Upcoming Movies" data={upcoming}/>}
           {toprated.length>0 && <MovieList title="Top Rated" data={toprated} /> }
 
           </ScrollView>)
