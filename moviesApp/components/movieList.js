@@ -8,14 +8,13 @@ const { width, height } = Dimensions.get('window');
 
 export default function MovieList({ title, data, hideSeeAll }) {
     const navigation = useNavigation();
-    let movieName = "Ant Man and The Wasp:Quantunamia";
     return (
         <View style={tw`mb-8 space-y-4`}>
             <View style={tw`mx-4 flex-row justify-between items-center mb-5`}>
                 <Text style={tw`text-white text-lg`}>{title}</Text>
                 {
                     !hideSeeAll && (
-                        <TouchableOpacity onPress={() => navigation.navigate('SeeAll')}>
+                        <TouchableOpacity onPress={() => navigation.push('SeeAll', title)}>
                             <Text style={{ ...styles.text, ...tw`text-lg` }}>See All</Text>
                         </TouchableOpacity>
 

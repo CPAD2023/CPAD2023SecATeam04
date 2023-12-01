@@ -3,24 +3,34 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'twrnc'
 import { XMarkIcon } from 'react-native-heroicons/outline'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
-import { fetchPopularMovies, fallbackMoviePoster, image185 } from '../api/moviedb';
+import { fetchPopularMovies, fallbackMoviePoster, image185, seeAllTopRated, seeAllUpcomingMovies } from '../api/moviedb';
 import { styles } from '../theme/theme';
 import Loading from '../components/loading';
 const { width, height } = Dimensions.get('window');
 
 export default function SeeAllScreen() {
+
+
     const navigation = useNavigation();
     const [results, setResults] = useState([]);
-    let movieName = "Ant Man and The Wasp:Quantunamia";
     const [loading, setLoading] = useState(true);
+    const { params: title } = useRoute();
+
     useEffect(() => {
-        getMoreMovies();
-    }, []);
+        getMoreMovies(title);
+    }, [title]);
+
     const getMoreMovies = async () => {
-        const data = await fetchPopularMovies();
-        console.log('got trending', data)
+        let data;
+        if (title == "Upcoming Movies") {
+            data = await seeAllUpcomingMovies();
+        }
+        else if (title == "Top Rated") {
+            data = await seeAllTopRated();
+        }
+        console.log('clicked see all and got data', data)
         if (data && data.results) setResults(data.results);
         setLoading(false);
     }
@@ -28,7 +38,7 @@ export default function SeeAllScreen() {
         <SafeAreaView style={tw`bg-neutral-800 flex-1`}>
             <View style={tw`mx-4 mb-3 flex-row  items-center`}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.push('Home')}
                 >
                     <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
                 </TouchableOpacity>
@@ -52,7 +62,7 @@ export default function SeeAllScreen() {
                                         return (
                                             <TouchableWithoutFeedback
                                                 key={index}
-                                            //onPress={()=> navigation.push('Movie', item)}
+                                                onPress={() => navigation.push('Movie', item)}
                                             >
                                                 <View style={tw`space-y-2 mb-4`}>
                                                     <Image

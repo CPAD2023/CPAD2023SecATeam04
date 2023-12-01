@@ -8,7 +8,7 @@ import SeeAllScreen from '../screens/SeeAllScreen'
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../Firebase';
 import MovieScreen from '../screens/MovieScreen';
-import personScreen from '../screens/personScreen';
+import PersonScreen from '../screens/PersonScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +40,7 @@ function InsideLayout() {
             <InsideStack.Screen
                 name="Person"
                 options={{ headerShown: false }}
-                component={personScreen}
+                component={PersonScreen}
             />
         </InsideStack.Navigator>
     )

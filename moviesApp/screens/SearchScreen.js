@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window');
 export default function SearchScreen() {
     const navigation = useNavigation();
     const [results, setResults] = useState([]);
-    let movieName = "Ant Man and The Wasp:Quantunamia";
+
     const handleSearch = search => {
         if (search && search.length > 2) {
             setLoading(true);
@@ -31,8 +31,10 @@ export default function SearchScreen() {
             setResults([])
         }
     }
+
     const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
     const [loading, setLoading] = useState(false);
+
     return (
         <SafeAreaView style={tw`bg-neutral-800 flex-1`}>
             <View style={tw`mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full`}>
@@ -66,7 +68,7 @@ export default function SearchScreen() {
                                         return (
                                             <TouchableWithoutFeedback
                                                 key={index}
-                                            //onPress={()=> navigation.push('Movie', item)}
+                                                onPress={() => navigation.push('Movie', item)}
                                             >
                                                 <View style={tw`space-y-2 mb-4`}>
                                                     <Image
