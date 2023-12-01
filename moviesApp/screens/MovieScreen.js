@@ -5,8 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeftIcon} from 'react-native-heroicons/outline';
 import { HeartIcon } from 'react-native-heroicons/solid';
 import tw from 'twrnc'
+import LinearGradient from 'react-native-linear-gradient';
 import Cast from '../components/cast';
 import MovieList from '../components/movieList';
+import { styles } from '../theme/theme';
 
 
 var {width, height} = Dimensions.get('window');
@@ -29,8 +31,8 @@ const MovieScreen = () => {
     style={tw `flex-1 bg-neutral-800`}
     >
       <View style={tw `w-full`}>
-        <SafeAreaView style={tw `absolute z-20 w-full flex-row justify-between items-center px-4` + topMargin}>
-          <TouchableOpacity style={tw `rounded-xl p-1`} onPress={()=>navigation.goBack()}>
+        <SafeAreaView style={tw`absolute z-20 w-full flex-row justify-between items-center px-4 mt-3`}>
+          <TouchableOpacity style={{ ...styles.background, ...tw`rounded-3xl` }} onPress={()=>navigation.goBack()}>
             <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=> toggleFavourite(!isFavourite)}>
@@ -41,6 +43,11 @@ const MovieScreen = () => {
           <Image source={require('../assets/images/moviePoster2.png')}
           style={{width, height: height*0.55}} 
           ></Image>
+          <LinearGradient 
+             colors={['transparent', 'rgba(23, 23, 23, 0.8)', 'rgba(23, 23, 23, 1)']} 
+            style={{ width, height: height * 0.40, ...tw`absolute bottom-0` }}
+                   start={{ x: 0.5, y: 0 }}
+                 end={{ x: 0.5, y: 1 }}/>
         </View>
       </View>
       {/* Ask Udita here for Syntax for className */}
