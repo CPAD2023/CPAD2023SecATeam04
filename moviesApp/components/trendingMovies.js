@@ -10,7 +10,7 @@ var {width, height} = Dimensions.get('window');
 export default function TrendingMovies({data}){
     const navigation = useNavigation();
 
-    const handleClick = item=>{
+    const handleClick = (item)=>{
         navigation.navigate('Movie', item);
     }
     return (

@@ -7,6 +7,7 @@ import SearchScreen from '../screens/SearchScreen';
 import SeeAllScreen from '../screens/SeeAllScreen'
 import { onAuthStateChanged} from 'firebase/auth';
 import { FIREBASE_AUTH } from '../Firebase';
+import MovieScreen from '../screens/MovieScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,11 @@ function InsideLayout(){
         name="Home"
         options={{headerShown: false}}
         component={HomeScreen}
+      />
+      <InsideStack.Screen
+        name="Movie"
+        options={{headerShown: false}}
+        component={MovieScreen}
       />
       <InsideStack.Screen
         name="Search"
