@@ -6,6 +6,7 @@ const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?api_key=${apiKe
 const upcomingMoviesEndpoint = `${apiBaseUrl}/movie/upcoming?api_key=${apiKey}`;
 const topRatedMoviesEndpoint = `${apiBaseUrl}/movie/top_rated?api_key=${apiKey}`;
 const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
+const popularMoviesEndpoint = `${apiBaseUrl}/movie/popular?api_key=${apiKey}`
 
 
 export const image500 = posterPath=> posterPath? 'https://image.tmdb.org/t/p/w500'+posterPath : null;
@@ -40,4 +41,12 @@ export const fetchUpcomingMovies = ()=>{
 }
 export const fetchTopRatedMovies = ()=>{
     return apiCall(topRatedMoviesEndpoint);
+}
+
+export const searchMovies = (params)=>{
+    return apiCall(searchMoviesEndpoint, params);
+}
+
+export const fetchPopularMovies = ()=>{
+    return apiCall(popularMoviesEndpoint)
 }

@@ -1,9 +1,10 @@
-import React, {useState, useEffect}  from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginScreen  from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SeeAllScreen from '../screens/SeeAllScreen'
 import { onAuthStateChanged} from 'firebase/auth';
 import { FIREBASE_AUTH } from '../Firebase';
 
@@ -24,6 +25,11 @@ function InsideLayout(){
         options={{headerShown: false}}
         component={SearchScreen}
       />
+      <InsideStack.Screen
+                name="SeeAll"
+                options={{headerShown: false}}
+                component={SeeAllScreen}
+              />
     </InsideStack.Navigator>
   )
 }
@@ -51,9 +57,9 @@ export default function AppNavigation() {
           name="Login"
           options={{headerShown: false}}
           component={LoginScreen}
-          />
+        />
         )}
-        
+
       </Stack.Navigator>
     </NavigationContainer>
   );
