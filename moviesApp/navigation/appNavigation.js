@@ -10,6 +10,7 @@ import { FIREBASE_AUTH } from '../Firebase';
 import MovieScreen from '../screens/MovieScreen';
 import PersonScreen from '../screens/PersonScreen';
 
+
 const Stack = createNativeStackNavigator();
 
 const InsideStack = createNativeStackNavigator();
