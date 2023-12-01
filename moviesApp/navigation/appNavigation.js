@@ -1,29 +1,65 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import LoginScreen  from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SeeAllScreen from '../screens/SeeAllScreen'
+import { onAuthStateChanged} from 'firebase/auth';
+import { FIREBASE_AUTH } from '../Firebase';
+
 const Stack = createNativeStackNavigator();
+
+const InsideStack = createNativeStackNavigator();
+
+function InsideLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen
+        name="Home"
+        options={{headerShown: false}}
+        component={HomeScreen}
+      />
+      <InsideStack.Screen
+        name="Search"
+        options={{headerShown: false}}
+        component={SearchScreen}
+      />
+      <InsideStack.Screen
+                name="SeeAll"
+                options={{headerShown: false}}
+                component={SeeAllScreen}
+              />
+    </InsideStack.Navigator>
+  )
+}
+
 export default function AppNavigation() {
+  const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    onAuthStateChanged(FIREBASE_AUTH, (user)=>{
+      console.log('user', user);
+      setUser(user);
+    })
+  }, [])
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
+      <Stack.Navigator initialRouteName="Login">
+        {user ? (
+          <Stack.Screen
+            name="InsideLayout"
+            options={{headerShown: false}}
+            component={InsideLayout}
+          />
+        ):(
+          <Stack.Screen
+          name="Login"
           options={{headerShown: false}}
-          component={HomeScreen}
+          component={LoginScreen}
         />
-        <Stack.Screen
-          name="Search"
-          options={{headerShown: false}}
-          component={SearchScreen}
-        />
-        <Stack.Screen
-          name="SeeAll"
-          options={{headerShown: false}}
-          component={SeeAllScreen}
-        />
+        )}
+
       </Stack.Navigator>
     </NavigationContainer>
   );
