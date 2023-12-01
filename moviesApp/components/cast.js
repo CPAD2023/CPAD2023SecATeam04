@@ -31,12 +31,12 @@ export default function Cast({ cast, navigation }) {
 
                                 <Text style={tw`text-white text-xs mt-1`}>
                                     {
-                                        person?.character?.length>10? person.character.slice(0,10)+'...' : person?.character
+                                        person?.character?.length > 10 ? person.character.slice(0, 10) + '...' : person?.character
                                     }
                                 </Text>
                                 <Text style={tw`text-neutral-400 text-xs mt-1`}>
                                     {
-                                        person?.original_name?.length>10? person.original_name.slice(0,10)+'...' : person?.original_name
+                                        person?.original_name?.length > 10 ? person.original_name.slice(0, 10) + '...' : person?.original_name
                                     }
                                 </Text>
                             </TouchableOpacity>
