@@ -48,9 +48,9 @@ export default function HomeScreen() {
             <SafeAreaView style={ios ? tw`-mb-2` : tw`mb-3`}>
                 <StatusBar style="light" />
                 <View style={tw`flex-row justify-between items-center`}>
-                    <Text style={tw`text-white text-3xl font-bold`}>
+                    <Text style={tw`text-white text-3xl font-bold ml-40`}>
                         <Text style={styles.text}>F</Text>ilmy</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                    <TouchableOpacity style={tw`mr-3`} onPress={() => navigation.navigate('Search')}>
                         <MagnifyingGlassIcon size="30" strokeWidth={2} color="white" />
                     </TouchableOpacity>
                 </View>
