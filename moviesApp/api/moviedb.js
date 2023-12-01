@@ -9,6 +9,12 @@ const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
 const popularMoviesEndpoint = `${apiBaseUrl}/movie/popular?api_key=${apiKey}`
 
 
+//dynamic endpoints
+const movieDetailsEndpoint = id=> `${apiBaseUrl}/movie/${id}?api_key=${apiKey}`
+const movieCreditsEndpoint = id=> `${apiBaseUrl}/movie/${id}/credits?api_key=${apiKey}`
+const similarMoviesEndpoint = id=> `${apiBaseUrl}/movie/${id}/similar?api_key=${apiKey}`;
+
+
 export const image500 = posterPath=> posterPath? 'https://image.tmdb.org/t/p/w500'+posterPath : null;
 export const image342 = posterPath=> posterPath? 'https://image.tmdb.org/t/p/w342'+posterPath : null;
 export const image185 = posterPath=> posterPath? 'https://image.tmdb.org/t/p/w185'+posterPath : null;
@@ -49,4 +55,15 @@ export const searchMovies = (params)=>{
 
 export const fetchPopularMovies = ()=>{
     return apiCall(popularMoviesEndpoint)
+}
+
+// movie screen apis
+export const fetchMovieDetails = (id)=>{
+    return apiCall(movieDetailsEndpoint(id));
+}
+export const fetchMovieCredits = (movieId)=>{
+    return apiCall(movieCreditsEndpoint(movieId));
+}
+export const fetchSimilarMovies = (movieId)=>{
+    return apiCall(similarMoviesEndpoint(movieId));
 }
