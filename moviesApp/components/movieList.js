@@ -6,16 +6,22 @@ import { useNavigation } from '@react-navigation/native'
 import {image185, fallbackMoviePoster} from '../api/moviedb';
 const {width, height} =  Dimensions.get('window');
 
-export default function MovieList({title, data}) {
+export default function MovieList({title, data, hideSeeAll}) {
     const navigation = useNavigation();
     let movieName= "Ant Man and The Wasp:Quantunamia";
     return(
         <View style={tw`mb-8 space-y-4`}>
             <View style={tw`mx-4 flex-row justify-between items-center`}>
             <Text style={tw`text-white text-lg`}>{title}</Text>
-            <TouchableOpacity onPress={()=> navigation.navigate('SeeAll')}>
-              <Text style={{ ...styles.text, ...tw`text-lg` }}>See All</Text>
-            </TouchableOpacity>
+            {
+                !hideSeeAll && (
+                    <TouchableOpacity onPress={()=> navigation.navigate('SeeAll')}>
+                    <Text style={{ ...styles.text, ...tw`text-lg` }}>See All</Text>
+                    </TouchableOpacity>
+                            
+                )
+            }
+            
                 </View>
                 <ScrollView 
         horizontal 
