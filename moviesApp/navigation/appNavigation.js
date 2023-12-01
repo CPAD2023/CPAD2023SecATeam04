@@ -8,7 +8,7 @@ import SeeAllScreen from '../screens/SeeAllScreen'
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../Firebase';
 import MovieScreen from '../screens/MovieScreen';
-import personScreen from '../screens/personScreen';
+import personScreen from '../screens/PersonScreen';
 
 const Stack = createNativeStackNavigator();
 

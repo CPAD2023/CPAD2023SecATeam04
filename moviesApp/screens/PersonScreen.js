@@ -7,7 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import MovieList from '../components/movieList';
 import { fallbackPersonImage, fetchPersonDetails, fetchPersonMovies, image185, image342, image500 } from '../api/moviedb';
 import Loading from '../components/loading';
-import { styles } from '../theme';
+import { styles } from '../theme/theme';
 const ios = Platform.OS == 'ios';
 const verticalMargin = ios? '':' my-3';
 var {width, height} = Dimensions.get('window');
