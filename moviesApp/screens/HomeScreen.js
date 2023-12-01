@@ -2,7 +2,7 @@ import {Text, View,Platform,TouchableOpacity,ScrollView} from 'react-native'
 import React,{ useEffect, useState }from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
-import {Bars3CenterLeftIcon,MagnifyingGlassIcon} from 'react-native-heroicons/outline'
+import {MagnifyingGlassIcon} from 'react-native-heroicons/outline'
 import tw from 'twrnc'
 import { styles } from '../theme/theme';
 import TrendingMovies from '../components/trendingMovies';
@@ -10,7 +10,6 @@ import MovieList from '../components/movieList';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/loading';
 import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/moviedb';
-
 
 const ios = Platform.OS === 'ios';
 
@@ -49,9 +48,8 @@ export default function HomeScreen() {
           <SafeAreaView style={ios?tw`-mb-2`: tw`mb-3`}>
           <StatusBar style="light" />
         <View style={tw`flex-row justify-between items-center`}>
-          <Bars3CenterLeftIcon size="30" strokeWidth={2} color="white" />
           <Text style={tw`text-white text-3xl font-bold`}>
-          <Text style={styles.text}>M</Text>ovies</Text>
+          <Text style={styles.text}>F</Text>ilmy</Text>
           <TouchableOpacity onPress={()=> navigation.navigate('Search')}>
             <MagnifyingGlassIcon size="30" strokeWidth={2} color="white" />
           </TouchableOpacity>

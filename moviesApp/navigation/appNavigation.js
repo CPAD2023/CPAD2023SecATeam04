@@ -1,23 +1,59 @@
-import React from 'react';
+import React, {useState, useEffect}  from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import LoginScreen  from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
+import { onAuthStateChanged} from 'firebase/auth';
+import { FIREBASE_AUTH } from '../Firebase';
+
 const Stack = createNativeStackNavigator();
+
+const InsideStack = createNativeStackNavigator();
+
+function InsideLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen
+        name="Home"
+        options={{headerShown: false}}
+        component={HomeScreen}
+      />
+      <InsideStack.Screen
+        name="Search"
+        options={{headerShown: false}}
+        component={SearchScreen}
+      />
+    </InsideStack.Navigator>
+  )
+}
+
 export default function AppNavigation() {
+  const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    onAuthStateChanged(FIREBASE_AUTH, (user)=>{
+      console.log('user', user);
+      setUser(user);
+    })
+  }, [])
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
+      <Stack.Navigator initialRouteName="Login">
+        {user ? (
+          <Stack.Screen
+            name="InsideLayout"
+            options={{headerShown: false}}
+            component={InsideLayout}
+          />
+        ):(
+          <Stack.Screen
+          name="Login"
           options={{headerShown: false}}
-          component={HomeScreen}
-        />
-        <Stack.Screen
-          name="Search"
-          options={{headerShown: false}}
-          component={SearchScreen}
-        />
+          component={LoginScreen}
+          />
+        )}
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
