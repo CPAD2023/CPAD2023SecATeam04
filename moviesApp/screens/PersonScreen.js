@@ -6,7 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'twrnc'
 import { styles } from '../theme/theme';
 import MovieList from '../components/movieList';
-import { fallbackPersonImage, fetchPersonDetails, fetchPersonMovies, image342 } from '../api/moviedb';
+import { fallbackPersonImage, fetchPersonDetails, fetchPersonMovies, image185, image342, image500 } from '../api/moviedb';
+import Loading from '../components/loading';
 
 
 const ios = Platform.OS == 'ios';
