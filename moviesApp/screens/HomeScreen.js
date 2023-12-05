@@ -10,6 +10,7 @@ import MovieList from '../components/movieList';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/loading';
 import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/moviedb';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ios = Platform.OS === 'ios';
 
@@ -21,11 +22,24 @@ export default function HomeScreen() {
     const navigation = useNavigation();
 
     useEffect(() => {
+        getAuthUser();
         getTrendingMovies();
         getUpcomingMovies();
         getTopRatedMovies();
     }, []);
-
+   const getAuthUser = async()=>{
+    console.log('Getting user auth function call:');
+    try {
+        const value = await AsyncStorage.getItem('user');
+        if (value !== null) {
+          console.log('Data retrieved successfully: ', value);
+        } else {
+          console.log('No data found for the key: ', key);
+        }
+      } catch (error) {
+        console.error('Error retrieving data: ', error);
+      }
+   }
     const getTrendingMovies = async () => {
         const data = await fetchTrendingMovies();
         console.log('got trending', data)
