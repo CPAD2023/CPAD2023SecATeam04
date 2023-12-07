@@ -1,6 +1,8 @@
 import axios from "axios";
 import { apiKey } from "../constants";
 import { FIREBASE_DB } from '../Firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 
 const apiBaseUrl = 'https://api.themoviedb.org/3';
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?api_key=${apiKey}`;
@@ -86,11 +88,35 @@ export const fetchPersonMovies = (id)=>{
 
 //favourite movies
 export const fetchFavouriteMovies = async () =>{
+    try{
+        const userId = await AsyncStorage.getItem('user');
+        const finaluserId = JSON.parse(userId).uid;
+        const docRef = doc(FIREBASE_DB, "favourites", finaluserId);
+        const docSnapshot = await getDoc(docRef);
+        console.log("From Movie db, the bookmarking data present for the user "+ userId +" is: " + JSON.stringify(docSnapshot.data()));
+        //Extract all movie ids
+        const docSnapshotData = docSnapshot.data();
+        let extractedIntegers = null;
+        if (docSnapshotData && docSnapshotData.movieIds) {
+            extractedIntegers = docSnapshotData.movieIds.map(Number);
+            console.log(extractedIntegers);
+        } else {
+        console.log('No movieIds array found in the document data.');
+        }
+        //Get the detail of every movie
+        let favMovies = {"results":[]};
+        for (const movie of extractedIntegers){
+            const movieDetails = await fetchMovieDetails(movie);
+            console.log(movieDetails);
+            favMovies.results.push(movieDetails);
+        }
+        console.log(favMovies);
+        return favMovies;
+    }catch(e){
+        console.log('Error while fetching favourite movies' + e);
+    }
     //Fetch all the favourite movies of the user
-    const userId = await getAuthUserId();
-    const docRef = doc(FIREBASE_DB, "favourites", userId);
-    const docSnapshot = await getDoc(docRef);
-    console.log("From Movie db, the bookmarking data present for the user "+ userId +" is: " + JSON.stringify(docSnapshot.data()));
+    
 
     
 }

@@ -44,22 +44,24 @@ export default function HomeScreen() {
    }
     const getTrendingMovies = async () => {
         const data = await fetchTrendingMovies();
-        console.log('got trending', data)
+        //console.log('got trending', data)
         if (data && data.results) setTrending(data.results);
         setLoading(false);
     }
     const getUpcomingMovies = async () => {
         const data = await fetchUpcomingMovies();
-        console.log('got upcoming', data.results.length)
+        //console.log('got upcoming', data.results.length)
         if (data && data.results) setUpcoming(data.results);
     }
     const getTopRatedMovies = async () => {
         const data = await fetchTopRatedMovies();
-        console.log('got top rated', data.results.length)
+        //console.log('got top rated', data.results.length)
         if (data && data.results) setToprated(data.results);
     }
     const getFavoriteMovies = async () => {
-        await fetchFavouriteMovies();
+        console.log('fetching favourite movies')
+        const data = await fetchFavouriteMovies();
+        if (data && data.results ) setFavourites(data.results);
         console.log('got favourite movies');
     }
 
@@ -87,7 +89,7 @@ export default function HomeScreen() {
                         {trending.length > 0 && <TrendingMovies data={trending} />}
                         {upcoming.length > 0 && <MovieList title="Upcoming Movies" data={upcoming} />}
                         {toprated.length > 0 && <MovieList title="Top Rated" data={toprated} />}
-                        {toprated.length > 0 && <MovieList title="Favourites" data={toprated} />}
+                        {favourites.length > 0 && <MovieList title="Favourites" data={favourites} />}
                     </ScrollView>)
             }
         </View>
