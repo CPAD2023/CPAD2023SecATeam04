@@ -11,7 +11,9 @@ import MovieList from '../components/movieList';
 import { styles } from '../theme/theme';
 import Loading from '../components/loading';
 import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doc, setDoc } from "firebase/firestore"; 
+import { FIREBASE_DB } from '../Firebase';
 
 var { width, height } = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
@@ -29,11 +31,40 @@ const MovieScreen = () => {
 
     useEffect(() => {
         //console.log("itemId ",+ item.id);
+        getAuthUserId();
         setLoading(true);
         getMovieDetials(item.id);
         getMovieCredits(item.id);
         getSimilarMovies(item.id);
     }, [item])
+
+    //Returns me the user information
+    const getAuthUserId = async()=>{
+        console.log('Getting user auth function call:');
+        const value = await AsyncStorage.getItem('user');
+        console.log(JSON.parse(value).uid)
+        return JSON.parse(value).uid;
+    }
+
+    //If I toggle the button
+    //Make the button red
+    //Add the movie in user's Favourites List
+    const addFavouriteMovie = async()=>{
+        console.log("Fav movie has been pressed")
+        const userId = await getAuthUserId();
+        console.log("The user id is " + userId)
+        console.log("The movie id is: "+ movie.id)
+        await setDoc(doc(FIREBASE_DB, "favourites", `${userId}`, {
+            movieId : movie.id
+        })).then((data) => { 
+            // Use the data from the server here 
+            console.log("The response after bookmarking"+ JSON.stringify(data)); 
+        }) 
+        .catch((error) => { 
+            // Handle any errors that occur 
+            console.error(error); 
+        }); 
+    }
 
     const getMovieDetials = async id => {
         const data = await fetchMovieDetails(id);
@@ -59,7 +90,6 @@ const MovieScreen = () => {
         }
     }
 
-
     return (
         <ScrollView
             contentContainerStyle={{ paddingBottom: 20 }}
@@ -70,8 +100,8 @@ const MovieScreen = () => {
                     <TouchableOpacity style={{ ...styles.background, ...tw`rounded-3xl` }} onPress={() => navigation.goBack()}>
                         <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => toggleFavourite(!isFavourite)}>
-                        <HeartIcon size="35" color={isFavourite ? 'red' : 'white'} />
+                    <TouchableOpacity onPress={() => addFavouriteMovie()}>
+                        <HeartIcon size="35" color='white' />
                     </TouchableOpacity>
                 </SafeAreaView>
                 {
