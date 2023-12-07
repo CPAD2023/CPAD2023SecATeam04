@@ -9,7 +9,7 @@ import TrendingMovies from '../components/trendingMovies';
 import MovieList from '../components/movieList';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/loading';
-import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/moviedb';
+import { fetchFavouriteMovies, fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/moviedb';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ios = Platform.OS === 'ios';
@@ -18,6 +18,7 @@ export default function HomeScreen() {
     const [trending, setTrending] = useState([1, 2, 3])
     const [upcoming, setUpcoming] = useState([1, 2, 3])
     const [toprated, setToprated] = useState([1, 2, 3])
+    const [favourites, setFavourites] = useState([1,2,3]);
     const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
 
@@ -26,6 +27,7 @@ export default function HomeScreen() {
         getTrendingMovies();
         getUpcomingMovies();
         getTopRatedMovies();
+        getFavoriteMovies();
     }, []);
    const getAuthUser = async()=>{
     console.log('Getting user auth function call:');
@@ -42,20 +44,27 @@ export default function HomeScreen() {
    }
     const getTrendingMovies = async () => {
         const data = await fetchTrendingMovies();
-        console.log('got trending', data)
+        //console.log('got trending', data)
         if (data && data.results) setTrending(data.results);
         setLoading(false);
     }
     const getUpcomingMovies = async () => {
         const data = await fetchUpcomingMovies();
-        console.log('got upcoming', data.results.length)
+        //console.log('got upcoming', data.results.length)
         if (data && data.results) setUpcoming(data.results);
     }
     const getTopRatedMovies = async () => {
         const data = await fetchTopRatedMovies();
-        console.log('got top rated', data.results.length)
+        //console.log('got top rated', data.results.length)
         if (data && data.results) setToprated(data.results);
     }
+    const getFavoriteMovies = async () => {
+        console.log('fetching favourite movies')
+        const data = await fetchFavouriteMovies();
+        if (data && data.results ) setFavourites(data.results);
+        console.log('got favourite movies');
+    }
+
 
     return (
         <View style={tw`flex-1 bg-neutral-800`}>
@@ -80,7 +89,7 @@ export default function HomeScreen() {
                         {trending.length > 0 && <TrendingMovies data={trending} />}
                         {upcoming.length > 0 && <MovieList title="Upcoming Movies" data={upcoming} />}
                         {toprated.length > 0 && <MovieList title="Top Rated" data={toprated} />}
-
+                        {favourites.length > 0 && <MovieList title="Favourites" data={favourites} />}
                     </ScrollView>)
             }
         </View>
