@@ -58,10 +58,25 @@ export default function HomeScreen() {
         //console.log('got top rated', data.results.length)
         if (data && data.results) setToprated(data.results);
     }
+    const setListToStorage = async (favoriteArray) => {
+        try {
+            await AsyncStorage.setItem('favouriteList', JSON.stringify(favoriteArray));
+          } catch (error) {
+            console.error('Error saving user data to AsyncStorage: ', error);
+          }
+    }
+
     const getFavoriteMovies = async () => {
         console.log('fetching favourite movies')
         const data = await fetchFavouriteMovies();
         if (data && data.results ) setFavourites(data.results);
+        const dynamicArray = [];
+        data.results.forEach(element => {
+            console.log(element.id);
+            dynamicArray.push(element.id);
+        });
+        console.log(dynamicArray);
+        setListToStorage(dynamicArray);
         console.log('got favourite movies');
     }
 

@@ -30,7 +30,7 @@ const MovieScreen = () => {
     const [movie, setMovie] = useState({});
 
     useEffect(() => {
-        //console.log("itemId ",+ item.id);
+        checkFavouriteMovie(item.id);
         getAuthUserId();
         setLoading(true);
         getMovieDetials(item.id);
@@ -45,6 +45,21 @@ const MovieScreen = () => {
         console.log(JSON.parse(value).uid)
         return JSON.parse(value).uid;
     }
+    const checkFavouriteMovie = async(id)=>{
+        const favouriteListString = await AsyncStorage.getItem('favouriteList');
+        console.log(id);
+        console.log(favouriteListString);
+        if (favouriteListString) {
+            const favouriteList = JSON.parse(favouriteListString);
+            for(var i=0;i<favouriteList.length;i++)
+            {
+                if(favouriteList[i]===id)
+                {
+                    toggleFavourite(true);
+                }
+            }
+          }
+    };
 
     //If I toggle the button
     //Make the button red
