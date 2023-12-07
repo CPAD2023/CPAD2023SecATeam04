@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiKey } from "../constants";
+import { FIREBASE_DB } from '../Firebase';
 
 const apiBaseUrl = 'https://api.themoviedb.org/3';
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?api_key=${apiKey}`;
@@ -81,4 +82,15 @@ export const fetchPersonDetails = (id)=>{
 
 export const fetchPersonMovies = (id)=>{
     return apiCall(personMoviesEndpoint(id));
+}
+
+//favourite movies
+export const fetchFavouriteMovies = async () =>{
+    //Fetch all the favourite movies of the user
+    const userId = await getAuthUserId();
+    const docRef = doc(FIREBASE_DB, "favourites", userId);
+    const docSnapshot = await getDoc(docRef);
+    console.log("From Movie db, the bookmarking data present for the user "+ userId +" is: " + JSON.stringify(docSnapshot.data()));
+
+    
 }
