@@ -12,7 +12,7 @@ import { styles } from '../theme/theme';
 import Loading from '../components/loading';
 import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { doc, setDoc } from "firebase/firestore"; 
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
 import { FIREBASE_DB } from '../Firebase';
 
 var { width, height } = Dimensions.get('window');
@@ -50,20 +50,35 @@ const MovieScreen = () => {
     //Make the button red
     //Add the movie in user's Favourites List
     const addFavouriteMovie = async()=>{
-        console.log("Fav movie has been pressed")
-        const userId = await getAuthUserId();
-        console.log("The user id is " + userId)
-        console.log("The movie id is: "+ movie.id)
-        await setDoc(doc(FIREBASE_DB, "favourites", `${userId}`, {
-            movieId : movie.id
-        })).then((data) => { 
-            // Use the data from the server here 
-            console.log("The response after bookmarking"+ JSON.stringify(data)); 
-        }) 
-        .catch((error) => { 
-            // Handle any errors that occur 
-            console.error(error); 
-        }); 
+        try{
+
+            toggleFavourite(!isFavourite);
+            
+            console.log("Fav movie has been pressed")
+            const userId = await getAuthUserId();
+            console.log("The user id is " + userId)
+            console.log("The movie id is: "+ movie.id)
+
+            const docRef = doc(FIREBASE_DB, "favourites", userId);
+            const docSnapshot = await getDoc(docRef);
+            
+            if(!docSnapshot.exists()){
+                await setDoc(docRef, {
+                    movieIds : arrayUnion(movie.id)
+                })
+            }else{
+                await updateDoc(docRef, {
+                    movieIds : arrayUnion(movie.id)
+                })
+            }
+            
+            console.log("Bookmarking successful")
+            console.log("The bookmarking data present for the user is: " + JSON.stringify(docSnapshot.data()));
+
+        }catch(e){
+            console.log("Error bookmarking"+ e)
+        }
+        
     }
 
     const getMovieDetials = async id => {
@@ -101,7 +116,7 @@ const MovieScreen = () => {
                         <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => addFavouriteMovie()}>
-                        <HeartIcon size="35" color='white' />
+                        <HeartIcon size="35" color={isFavourite? 'red':'white'} />
                     </TouchableOpacity>
                 </SafeAreaView>
                 {
