@@ -9,6 +9,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../Firebase';
 import MovieScreen from '../screens/MovieScreen';
 import PersonScreen from '../screens/PersonScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Stack = createNativeStackNavigator();
@@ -47,14 +48,31 @@ function InsideLayout() {
     )
 }
 
-export default function AppNavigation() {
+export default  function AppNavigation() {
     const [user, setUser] = useState(null);
 
+    const setUserToStorage = async (user) => {
+        console.log("user is set to storage");
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+          } catch (error) {
+            console.error('Error saving user data to AsyncStorage: ', error);
+          }
+    }
+
     useEffect(() => {
-        onAuthStateChanged(FIREBASE_AUTH, (user) => {
-            console.log('user', user);
+        // onAuthStateChanged(FIREBASE_AUTH, (user) => {
+        //     console.log('user from', user);
+        //     setUser(user);
+        //      setUserToStorage(user);
+        // })
+        const handleAuthStateChanged = async (user) => {
+            console.log('user got ', user);
             setUser(user);
-        })
+            await setUserToStorage(user);
+          };
+        
+          onAuthStateChanged(FIREBASE_AUTH, handleAuthStateChanged);
     }, [])
     return (
         <NavigationContainer>

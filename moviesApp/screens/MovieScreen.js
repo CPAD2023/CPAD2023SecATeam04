@@ -11,7 +11,9 @@ import MovieList from '../components/movieList';
 import { styles } from '../theme/theme';
 import Loading from '../components/loading';
 import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"; 
+import { FIREBASE_DB } from '../Firebase';
 
 var { width, height } = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
@@ -28,12 +30,71 @@ const MovieScreen = () => {
     const [movie, setMovie] = useState({});
 
     useEffect(() => {
-        //console.log("itemId ",+ item.id);
+        checkFavouriteMovie(item.id);
+        getAuthUserId();
         setLoading(true);
         getMovieDetials(item.id);
         getMovieCredits(item.id);
         getSimilarMovies(item.id);
     }, [item])
+
+    //Returns me the user information
+    const getAuthUserId = async()=>{
+        console.log('Getting user auth function call:');
+        const value = await AsyncStorage.getItem('user');
+        console.log(JSON.parse(value).uid)
+        return JSON.parse(value).uid;
+    }
+    const checkFavouriteMovie = async(id)=>{
+        const favouriteListString = await AsyncStorage.getItem('favouriteList');
+        console.log(id);
+        console.log(favouriteListString);
+        if (favouriteListString) {
+            const favouriteList = JSON.parse(favouriteListString);
+            for(var i=0;i<favouriteList.length;i++)
+            {
+                if(favouriteList[i]===id)
+                {
+                    toggleFavourite(true);
+                }
+            }
+          }
+    };
+
+    //If I toggle the button
+    //Make the button red
+    //Add the movie in user's Favourites List
+    const addFavouriteMovie = async()=>{
+        try{
+
+            toggleFavourite(!isFavourite);
+            
+            console.log("Fav movie has been pressed")
+            const userId = await getAuthUserId();
+            console.log("The user id is " + userId)
+            console.log("The movie id is: "+ movie.id)
+
+            const docRef = doc(FIREBASE_DB, "favourites", userId);
+            const docSnapshot = await getDoc(docRef);
+            
+            if(!docSnapshot.exists()){
+                await setDoc(docRef, {
+                    movieIds : arrayUnion(movie.id)
+                })
+            }else{
+                await updateDoc(docRef, {
+                    movieIds : arrayUnion(movie.id)
+                })
+            }
+            
+            console.log("Bookmarking successful")
+            console.log("The bookmarking data present for the user is: " + JSON.stringify(docSnapshot.data()));
+
+        }catch(e){
+            console.log("Error bookmarking"+ e)
+        }
+        
+    }
 
     const getMovieDetials = async id => {
         const data = await fetchMovieDetails(id);
@@ -59,7 +120,6 @@ const MovieScreen = () => {
         }
     }
 
-
     return (
         <ScrollView
             contentContainerStyle={{ paddingBottom: 20 }}
@@ -70,8 +130,8 @@ const MovieScreen = () => {
                     <TouchableOpacity style={{ ...styles.background, ...tw`rounded-3xl` }} onPress={() => navigation.goBack()}>
                         <ChevronLeftIcon size="28" strokeWidth={2.5} color="white" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => toggleFavourite(!isFavourite)}>
-                        <HeartIcon size="35" color={isFavourite ? 'red' : 'white'} />
+                    <TouchableOpacity onPress={() => addFavouriteMovie()}>
+                        <HeartIcon size="35" color={isFavourite? 'red':'white'} />
                     </TouchableOpacity>
                 </SafeAreaView>
                 {
