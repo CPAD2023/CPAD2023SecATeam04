@@ -20,7 +20,7 @@ Movie App "Filmy"
 3. **Database(Firebase Auth)**:- to store the user emails and passwords
 4. **Database(Firestore)**:- use of firestore to store users’ favourite movies.
 5. **Local Storage(AsyncStorage)**:- use of  AsyncStorage to store the user's reference within the application.
-6. **TMDB Database** :- use of  TMDB database which is  an online movie database. We can consumed their APIs to access the movie details, movie cast details, upcoming movies, trending movie details
+6. **TMDB Database** :- use of  TMDB database which is  an online movie database. We can consume their APIs to access the movie details, movie cast details, upcoming movies, trending movie details
 
 ## Workflow of App: 🌝
 ![image](https://github.com/CPAD2023/CPAD2023SecATeam04/assets/42775082/b3bf3aea-011d-4d36-abe4-79b4b974f3f5)
